@@ -1,0 +1,12 @@
+{
+    "xsappname": "ZD00_CAP-cds",
+    "tenant-mode": "dedicated",
+    "scopes": [
+      {
+          "name": "$XSAPPNAME.CAP",
+          "description": "CAP"
+      }
+    ],
+  "attributes": [],
+  "role-templates": []
+}

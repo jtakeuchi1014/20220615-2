@@ -1,0 +1,30 @@
+entity ZTX0000 {
+    key MANDT          : String(3);
+    key BUKRS          : String(4);
+    key RSBCD          : String(3);
+        IFTYPENO       : String(5);
+        TBLID          : String(7);
+        PRCNUM         : Integer;
+        MTFLG          : String(1);
+        UMFLG          : String(1);
+        PCFLG          : String(1);
+        MAILNOTIFY     : String(1);
+        FILENOTYFY     : String(1);
+        SMTP_ADDR      : String(241);
+        FILEPATH       : String(255);
+        LAISO          : String(2);
+        REMARKS        : String(255);
+        GFLG1          : String(1);
+        GFLG2          : String(1);
+        GFLG3          : String(1);
+        GFLG4          : String(1);
+        GFLG5          : String(1);
+        UNAME          : String(12);
+        UBUKRSCD       : String(4);
+        AFFILICD       : String(10);
+        BNAME          : String(12);
+        LBCODE         : String(2);
+        LASTUPDATETIME : Decimal(15);
+        SYSNM          : String(100);
+        FILECODEPAGE   : String(1);
+}

@@ -1,0 +1,12 @@
+{
+    "role": {
+      "name": "ZD00_EXT_ROLE_STD",
+      "schema_privileges": [
+        {
+          "privileges": [
+            "SELECT","UPDATE","INSERT","DELETE","EXECUTE","SELECT METADATA"
+          ]
+        }
+      ]
+    }
+}

@@ -1,0 +1,76 @@
+---
+_schema-version: '3.1'
+ID: ZD00_CAP
+version: 1.0.0-SNAPSHOT
+description: "ZD00_CAP application"
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm install --production
+        - npx -p @sap/cds-dk cds build --production
+
+modules:
+  - name: ZD00_CAP-AppRouter
+    type: approuter.nodejs
+    path: approuter
+    parameters:
+     disk-quota: 256M
+     memory: 256M
+    requires:
+     - name: XSUAA_ZD00_CAP
+     - name: srv-api
+       group: destinations
+       properties:
+         name: srv-api 
+         url: "~{srv-url}"
+         forwardAuthToken: true
+
+  - name: ZD00_CAP-srv
+    type: java
+    path: srv
+    parameters:
+      buildpack: sap_java_buildpack
+    properties:
+      JBP_CONFIG_COMPONENTS: '{ jres: ["com.sap.xs.java.buildpack.jdk.SAPMachineJDK"] }'
+      JBP_CONFIG_SAP_MACHINE_JRE: '{ jre: { version: "11.+" } }'
+      SPRING_PROFILES_ACTIVE: cloud
+    build-parameters:
+      builder: custom
+      commands: [ mvn clean package -DskipTests=true ]
+      build-result: "target/*-exec.[wj]ar"
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: ZD00_CAP-db
+      - name: XSUAA_ZD00_CAP
+
+  - name: ZD00_CAP-db-deployer
+    type: hdb
+    path: db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: ZD00_CAP-db
+
+resources:
+  - name: ZD00_CAP-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+      config:
+        schema: ZD00_SCHEMA
+    properties:
+      hdi-service-name: ${service-name}
+
+  - name: XSUAA_ZD00_CAP
+    type: org.cloudfoundry.managed-service
+    parameters:
+     service: xsuaa
+     service-plan: application
+     path: ./xsuaa/xs-security-ZD00.json  
